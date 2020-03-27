@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="GTA5SightseerApp.Controls.SlotMachineItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GTA5SightseerApp.Controls"
+             mc:Ignorable="d" HorizontalAlignment="Center"
+             d:DesignHeight="50" d:DesignWidth="80"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:il1="clr-namespace:Microsoft.Expression.Interactivity.Layout;assembly=Microsoft.Expression.Interactions">
+    <TextBlock Text="{Binding ContentText}" Foreground="{Binding ContentForeground}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+</UserControl>

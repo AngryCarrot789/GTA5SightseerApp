@@ -28,6 +28,7 @@ namespace GTA5SightseerApp
 
         public MainWindow()
         {
+            //e
             InitializeComponent();
             ViewModel.ResetScreenAnimation = ResetScreenAnimation;
             ViewModel.ShowStatusScreen = ShowYouWinScreen;
