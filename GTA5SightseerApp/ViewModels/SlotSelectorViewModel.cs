@@ -45,6 +45,14 @@ namespace GTA5SightseerApp.ViewModels
         public Visibility Slot8Visibility { get => _slot8; set => RaisePropertyChanged(ref _slot8, value); }
 
         public Action UpdateSelectedSlotMachineCollection { get; set; }
+        public Action GetSelectedSlotMachine { get; set; }
+
+        private ObservableCollection<SlotMachineItem> _selectedSlotMachine = new ObservableCollection<SlotMachineItem>();
+        public ObservableCollection<SlotMachineItem> SelectedSlotMachine
+        {
+            get => _selectedSlotMachine;
+            set => RaisePropertyChanged(ref _selectedSlotMachine, value);
+        }
 
         // idk wont use... or might.... idk
         // > life in a nutshell
@@ -93,6 +101,10 @@ namespace GTA5SightseerApp.ViewModels
             if (SelectedSlotMachineIndex < 8) //thers 8 slots soo...
             {
                 SelectedSlotMachineIndex += 1;
+            }
+            else
+            {
+                SelectedSlotMachineIndex = 1;
             }
         }
 

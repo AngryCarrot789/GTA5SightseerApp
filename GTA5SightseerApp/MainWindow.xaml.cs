@@ -1,4 +1,6 @@
-﻿using GTA5SightseerApp.ViewModels;
+﻿using GTA5SightseerApp.Controls;
+using GTA5SightseerApp.ViewModels;
+using GTA5SightseerApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +30,11 @@ namespace GTA5SightseerApp
         {
             InitializeComponent();
             ViewModel.ResetScreenAnimation = ResetScreenAnimation;
-            //i dont care if this annoys you, fucnk you
+            ViewModel.ShowStatusScreen = ShowYouWinScreen;
+            ViewModel.HideStatusScreen = HideYouWinScreen;
+            yws = new YouWinScreen("00:00:0000");
+            yfs = new YouFailedLol();
+            //i dont care if this annoys you xdddddddddddddd
             Button_Click(null, null);
         }
 
@@ -54,6 +60,62 @@ namespace GTA5SightseerApp
                 });
             });
         }
+        YouWinScreen yws;
+        YouFailedLol yfs;
+        private void ShowYouWinScreen(int completedOrFailed)
+        {
+            switch (completedOrFailed)
+            {
+                case 1:
+                    yws = new YouWinScreen(ViewModel.CountdownTimerFormatted);
+                    yws.Opacity = 0;
+                    MainGrid.Children.Add(yws);
+                    yws.AnimateOpacity(0, 1, TimeSpan.FromMilliseconds(320));
+                    break;
+                case 2:
+                    yfs = new YouFailedLol();
+                    yfs.Opacity = 0;
+                    MainGrid.Children.Add(yfs);
+                    yfs.AnimateOpacity(0, 1, TimeSpan.FromMilliseconds(320));
+                    break;
+            }
+        }
+
+        private void HideYouWinScreen(int completedOrFailed)
+        {
+            if (yws != null || yfs != null)
+            {
+                switch (completedOrFailed)
+                {
+                    case 1:
+                        yws.AnimateOpacity(1, 0, TimeSpan.FromMilliseconds(400));
+
+                        //dirty but idc lul
+                        Task.Run(async () =>
+                        {
+                            await Task.Delay(420);
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                MainGrid.Children.Remove(yws);
+                            });
+                        });
+                        break;
+                    case 2:
+                        yfs.AnimateOpacity(1, 0, TimeSpan.FromMilliseconds(400));
+
+                        //dirty but idc lul
+                        Task.Run(async () =>
+                        {
+                            await Task.Delay(420);
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                MainGrid.Children.Remove(yfs);
+                            });
+                        });
+                        break;
+                }
+            }
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -64,7 +126,7 @@ namespace GTA5SightseerApp
              }
             else
             {
-                ViewModel.SlotMachineRunning = false;
+                ViewModel.StopCycle();
                 strtBtn.Content = "Start";
             }
         }
@@ -76,7 +138,23 @@ namespace GTA5SightseerApp
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            ViewModel.MoveSlotSelectorToStart();
+            ViewModel.RestartSlotSelector();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            ViewModel.AddWordWindow.Show();
+        }
+
+        private void MoveandSelectClick(object sender, RoutedEventArgs e)
+        {
+            switch(int.Parse(((Button)sender).Uid))
+            {
+                //i dont care lol this is ezpz lemon squeezy
+                case 0: ViewModel.KeyDown(Key.Left); break;
+                case 1: ViewModel.KeyDown(Key.Enter); break;
+                case 2: ViewModel.KeyDown(Key.Right); break;
+            }
         }
     }
 }

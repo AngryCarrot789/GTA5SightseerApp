@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -34,6 +35,7 @@ namespace GTA5SightseerApp.ViewModels
         public ObservableCollection<SlotMachineItem> SlotMachineColumn7 { get => _slotMachineColumn7; set => RaisePropertyChanged(ref _slotMachineColumn7, value); }
         public ObservableCollection<SlotMachineItem> SlotMachineColumn8 { get => _slotMachineColumn8; set => RaisePropertyChanged(ref _slotMachineColumn8, value); }
 
+        public string CurrentWord { get; set; }
 
         private ObservableCollection<SlotMachineItem> _selectedSlotMachine = new ObservableCollection<SlotMachineItem>();
         public ObservableCollection<SlotMachineItem> SelectedSlotMachine
@@ -49,7 +51,6 @@ namespace GTA5SightseerApp.ViewModels
             get => _highlightedItem;
             set
             {
-                UnHighlightOldItem(_highlightedItem);
                 RaisePropertyChanged(ref _highlightedItem, value);
                 HighlightSelectedItem(value);
             }
@@ -81,30 +82,33 @@ namespace GTA5SightseerApp.ViewModels
         public SlotMachineViewModel()
         {
             AllowAllSlotsToCycle();
-            //CycleItems(556);
-            AMILKMAN();
+            CurrentWord = "AMILKMAN";
+            AddWordToSlotMachine(CurrentWord);
         }
 
-        //A Milk Man
-        public void AMILKMAN()
+        public void AddWordToSlotMachine(string word)
         {
-            AddRandomLettersToSlotMachineExcludingGivenLetter(1, "A");
-            AddRandomLettersToSlotMachineExcludingGivenLetter(2, "M");
-            AddRandomLettersToSlotMachineExcludingGivenLetter(3, "I");
-            AddRandomLettersToSlotMachineExcludingGivenLetter(4, "L");
-            AddRandomLettersToSlotMachineExcludingGivenLetter(5, "K");
-            AddRandomLettersToSlotMachineExcludingGivenLetter(6, "M");
-            AddRandomLettersToSlotMachineExcludingGivenLetter(7, "A");
-            AddRandomLettersToSlotMachineExcludingGivenLetter(8, "N");
+            ClearSlotMachine();
+            CurrentWord = word;
+            AddRandomNonAnswerToSlotMachine(word);
+            AddAnswerWordsToSlotMachine(word);
+        }
 
-            InsertAnswerLetterRandomlyIntoSlotMachine(1, "A");
-            InsertAnswerLetterRandomlyIntoSlotMachine(2, "M");
-            InsertAnswerLetterRandomlyIntoSlotMachine(3, "I");
-            InsertAnswerLetterRandomlyIntoSlotMachine(4, "L");
-            InsertAnswerLetterRandomlyIntoSlotMachine(5, "K");
-            InsertAnswerLetterRandomlyIntoSlotMachine(6, "M");
-            InsertAnswerLetterRandomlyIntoSlotMachine(7, "A");
-            InsertAnswerLetterRandomlyIntoSlotMachine(8, "N");
+        public void AddRandomNonAnswerToSlotMachine(string answer)
+        {
+            for (int i = 1; i <= 8; i++)
+            {
+                string letter = answer[i-1].ToString();
+                AddRandomLettersToSlotMachineExcludingGivenLetter(i, letter);
+            }
+        }
+        public void AddAnswerWordsToSlotMachine(string answer)
+        {
+            for (int i = 1; i <= answer.Length; i++)
+            {
+                string letter = answer[i-1].ToString();
+                InsertAnswerLetterRandomlyIntoSlotMachine(i, letter.ToString());
+            }
         }
 
         public void HighlightSelectedItem(SlotMachineItem smi)
@@ -121,23 +125,6 @@ namespace GTA5SightseerApp.ViewModels
                     //smi.ViewModel.ContentForeground = new SolidColorBrush(Colors.Blue);
                     MoveSlotSelectorToStart?.Invoke();
                     UnHighlightAllItems();
-                }
-            }
-        }
-
-        public void UnHighlightOldItem(SlotMachineItem smi)
-        {
-            if (smi != null)
-            {
-                if (smi.ViewModel.IsAnswerItem)
-                {
-                    //smi.ViewModel.ContentForeground = new SolidColorBrush(Colors.Red);
-                    //MoveSlotSelectorToStart?.Invoke();
-                }
-                else
-                {
-                    smi.ViewModel.ContentForeground = new SolidColorBrush(Colors.White);
-                    //MoveSlotSelectorToStart?.Invoke();
                 }
             }
         }
@@ -178,7 +165,26 @@ namespace GTA5SightseerApp.ViewModels
             SlotMachine8AllowedToCycle = true;
         }
 
+        public bool AllSlotMachinesStopped()
+        {
+            return !SlotMachine1AllowedToCycle &&
+                   !SlotMachine2AllowedToCycle &&
+                   !SlotMachine3AllowedToCycle &&
+                   !SlotMachine4AllowedToCycle &&
+                   !SlotMachine5AllowedToCycle &&
+                   !SlotMachine6AllowedToCycle &&
+                   !SlotMachine7AllowedToCycle &&
+                   !SlotMachine8AllowedToCycle;
+        }
+
         public void ResetEverything()
+        {
+            ClearSlotMachine();
+            AllowAllSlotsToCycle();
+            AddWordToSlotMachine(CurrentWord);
+        }
+
+        public void ClearSlotMachine()
         {
             SlotMachineColumn1.Clear();
             SlotMachineColumn2.Clear();
@@ -188,8 +194,27 @@ namespace GTA5SightseerApp.ViewModels
             SlotMachineColumn6.Clear();
             SlotMachineColumn7.Clear();
             SlotMachineColumn8.Clear();
+        }
 
-            AMILKMAN();
+        public void UpdateSelectorSelectedCollection(int selectorIndex)
+        {
+            switch (selectorIndex)
+            {
+                case 1: SelectedSlotMachine = SlotMachineColumn1; break;
+                case 2: SelectedSlotMachine = SlotMachineColumn2; break;
+                case 3: SelectedSlotMachine = SlotMachineColumn3; break;
+                case 4: SelectedSlotMachine = SlotMachineColumn4; break;
+                case 5: SelectedSlotMachine = SlotMachineColumn5; break;
+                case 6: SelectedSlotMachine = SlotMachineColumn6; break;
+                case 7: SelectedSlotMachine = SlotMachineColumn7; break;
+                case 8: SelectedSlotMachine = SlotMachineColumn8; break;
+            }
+        }
+
+        public void SetHighlightedSlotMachineItem()
+        {
+            StopSlotWithHighlightedItemIn(HighlightedSlotItem);
+            HighlightedSlotItem = SelectedSlotMachine[3];
         }
 
         private Random RandNumber = new Random();
@@ -245,17 +270,21 @@ namespace GTA5SightseerApp.ViewModels
         // cant think of a better name
         public void MoveItemFromBottomToTopOfList(int slotMachine)
         {
-            switch (slotMachine)
+            try
             {
-                case 1: SlotMachineColumn1.Move(SlotMachineColumn1.Count - 1, 0); break;
-                case 2: SlotMachineColumn2.Move(SlotMachineColumn2.Count - 1, 0); break;
-                case 3: SlotMachineColumn3.Move(SlotMachineColumn3.Count - 1, 0); break;
-                case 4: SlotMachineColumn4.Move(SlotMachineColumn4.Count - 1, 0); break;
-                case 5: SlotMachineColumn5.Move(SlotMachineColumn5.Count - 1, 0); break;
-                case 6: SlotMachineColumn6.Move(SlotMachineColumn6.Count - 1, 0); break;
-                case 7: SlotMachineColumn7.Move(SlotMachineColumn7.Count - 1, 0); break;
-                case 8: SlotMachineColumn8.Move(SlotMachineColumn8.Count - 1, 0); break;
+                switch (slotMachine)
+                {
+                    case 1: SlotMachineColumn1.Move(SlotMachineColumn1.Count - 1, 0); break;
+                    case 2: SlotMachineColumn2.Move(SlotMachineColumn2.Count - 1, 0); break;
+                    case 3: SlotMachineColumn3.Move(SlotMachineColumn3.Count - 1, 0); break;
+                    case 4: SlotMachineColumn4.Move(SlotMachineColumn4.Count - 1, 0); break;
+                    case 5: SlotMachineColumn5.Move(SlotMachineColumn5.Count - 1, 0); break;
+                    case 6: SlotMachineColumn6.Move(SlotMachineColumn6.Count - 1, 0); break;
+                    case 7: SlotMachineColumn7.Move(SlotMachineColumn7.Count - 1, 0); break;
+                    case 8: SlotMachineColumn8.Move(SlotMachineColumn8.Count - 1, 0); break;
+                }
             }
+            catch { }
         }
 
         // Spin-sort-of a slot machine. Aka, move every item down 1

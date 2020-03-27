@@ -65,16 +65,30 @@
     <Compile Include="Controls\SlotMachineItem.xaml.cs">
       <DependentUpon>SlotMachineItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\YouFailedLol.xaml.cs">
+      <DependentUpon>YouFailedLol.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\YouWinScreen.xaml.cs">
+      <DependentUpon>YouWinScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\BaseViewModel.cs" />
     <Compile Include="Utilities\Command.cs" />
     <Compile Include="Utilities\CommandParam.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SlotMachineViewModel.cs" />
     <Compile Include="ViewModels\SlotSelectorViewModel.cs" />
-    <Compile Include="Views\icantbebotheredtoallowyouytoaddcustomwordslol.xaml.cs">
-      <DependentUpon>icantbebotheredtoallowyouytoaddcustomwordslol.xaml</DependentUpon>
+    <Compile Include="Views\AddCustomWordsWindow.xaml.cs">
+      <DependentUpon>AddCustomWordsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\SlotMachineItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\YouFailedLol.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\YouWinScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -94,11 +108,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\LightTheme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\icantbebotheredtoallowyouytoaddcustomwordslol.xaml">
+    <Page Include="Views\AddCustomWordsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

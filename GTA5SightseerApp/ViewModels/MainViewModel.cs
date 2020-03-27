@@ -1,5 +1,6 @@
 ﻿using GTA5SightseerApp.Controls;
 using GTA5SightseerApp.Utilities;
+using GTA5SightseerApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,36 @@ namespace GTA5SightseerApp.ViewModels
             }
         }
 
+        private int _signalStrength;
+        public int SignalStrength
+        {
+            get => _signalStrength;
+            set
+            {
+                RaisePropertyChanged(ref _signalStrength, value);
+            }
+        }
+
+        private bool _hasFinished;
+        public bool HasCompletedSlotMachine
+        {
+            get => _hasFinished;
+            set
+            {
+                RaisePropertyChanged(ref _hasFinished, value);
+            }
+        }
+
+        private bool _statusScreenShowing;
+        public bool StatusScreenShowing
+        {
+            get => _statusScreenShowing;
+            set
+            {
+                RaisePropertyChanged(ref _statusScreenShowing, value);
+            }
+        }
+
         private bool _isSlotMachineRunning;
         public bool SlotMachineRunning
         {
@@ -49,7 +80,7 @@ namespace GTA5SightseerApp.ViewModels
             set => RaisePropertyChanged(ref _countdownString, value);
         }
 
-        #endregion//quad5914 xdddd
+        #endregion
         /// <summary>
         /// Allows you to actually close the window lol
         /// binded through MVVM, aka the datacontext from darktheme.xaml
@@ -58,8 +89,10 @@ namespace GTA5SightseerApp.ViewModels
         public SlotMachineViewModel SlotMachine { get; set; }
         public SlotSelectorViewModel SlotSelector { get; set; }
         public DispatcherTimer Timer { get; set; }
-
+        public AddCustomWordsWindow AddWordWindow { get; set; }
         public Action ResetScreenAnimation { get; set; }
+        public Action<int> ShowStatusScreen { get; set; }
+        public Action<int> HideStatusScreen { get; set; }
 
         public MainViewModel()
         {
@@ -68,104 +101,55 @@ namespace GTA5SightseerApp.ViewModels
             SlotSelector = new SlotSelectorViewModel();
             SlotSelector.UpdateSelectedSlotMachineCollection = UpdateSelectorSelectedCollection;
             SlotMachine.MoveSlotSelectorRight = MoveSlotSelectorRight;
-            SlotMachine.MoveSlotSelectorToStart = MoveSlotSelectorToStart;
-            SlotSelector.SelectedSlotMachineIndex = 1;
+            SlotMachine.MoveSlotSelectorToStart = RestartSlotSelector;
+            SlotSelector.GetSelectedSlotMachine = SetSlotSelectorSelectedSlotMachine;
             SlotMachineRunning = false;
-            //SlotSelector.UpdateHighlightedSlotMachineItemCallback = SetHighlightedSlotMachineItem;
+            SlotSelector.SelectedSlotMachineIndex = 1;
+            AddWordWindow = new AddCustomWordsWindow();
+            AddWordWindow.AddWordCallback = AddWordToSlotMachine;
 
             MaximumTimerTime = 120;
             Timer = new DispatcherTimer(DispatcherPriority.Render);
             Timer.Tick += TimerTicked;
         }
 
-        public void KeyDown(Key key)
-        {
-            SlotSelector.KeyDown(key);
-            //quad5914 xddddddddddddddddddddddddddddddddd
-            if (key == Key.Enter)
-                SetHighlightedSlotMachineItem();
-            else if (key == Key.Space)
-                SetHighlightedSlotMachineItem();
-        }
-
-        public void MoveSlotSelectorRight() { SlotSelector.MoveSelectorRight(); }
-        public void MoveSlotSelectorToStart()
-        {
-            SlotSelector.ResetEverything();
-            SlotMachine.ResetEverything();
-            ResetScreenAnimation?.Invoke();
-            SlotMachine.AllowAllSlotsToCycle();
-        }
-
-        public void UpdateSelectorSelectedCollection()
-        {
-            switch (SlotSelector.SelectedSlotMachineIndex)
-            {
-                case 1: SlotMachine.SelectedSlotMachine = SlotMachine.SlotMachineColumn1; break;
-                case 2: SlotMachine.SelectedSlotMachine = SlotMachine.SlotMachineColumn2; break;
-                case 3: SlotMachine.SelectedSlotMachine = SlotMachine.SlotMachineColumn3; break;
-                case 4: SlotMachine.SelectedSlotMachine = SlotMachine.SlotMachineColumn4; break;
-                case 5: SlotMachine.SelectedSlotMachine = SlotMachine.SlotMachineColumn5; break;
-                case 6: SlotMachine.SelectedSlotMachine = SlotMachine.SlotMachineColumn6; break;
-                case 7: SlotMachine.SelectedSlotMachine = SlotMachine.SlotMachineColumn7; break;
-                case 8: SlotMachine.SelectedSlotMachine = SlotMachine.SlotMachineColumn8; break;
-            }
-        }
-
-        public void SetHighlightedSlotMachineItem()
-        {
-            Point technicallyNotMousePoint = new Point(0, 0);
-            switch (SlotSelector.SelectedSlotMachineIndex)
-            {
-                case 1: technicallyNotMousePoint = new Point(195, 435); break;
-                case 2: technicallyNotMousePoint = new Point(292, 435); break;
-                case 3: technicallyNotMousePoint = new Point(392, 435); break;
-                case 4: technicallyNotMousePoint = new Point(489, 435); break;
-                case 5: technicallyNotMousePoint = new Point(589, 435); break;
-                case 6: technicallyNotMousePoint = new Point(686, 435); break;
-                case 7: technicallyNotMousePoint = new Point(784, 435); break;
-                case 8: technicallyNotMousePoint = new Point(882, 435); break;
-            }
-
-            HitTestResult slotHitControl = VisualTreeHelper.HitTest(Application.Current.MainWindow, technicallyNotMousePoint);
-            if (slotHitControl.VisualHit is TextBlock slotItemContent)
-            {
-                SlotMachine.StopSlotWithHighlightedItemIn(SlotMachine.HighlightedSlotItem);
-                SlotMachine.HighlightedSlotItem = GetSlotItemFromContentControl(slotItemContent);
-            }
-        }
-
-        public SlotMachineItem GetSlotItemFromContentControl(TextBlock content)
-        {
-            foreach (SlotMachineItem smi in SlotMachine.SelectedSlotMachine)
-            {
-                if (smi.Content == content)
-                    return smi;
-            }
-            return null;
-        }
-
-        private void TimerTicked(object sender, EventArgs e)
-        {
-            if (CountdownTimer >= 0)
-            {
-                CountdownTimer -= Timer.Interval.Milliseconds;
-            }
-        }
-
         public void StartCycle()
         {
             Timer.Interval = TimeSpan.FromSeconds(0.1);
+            SignalStrength = 100;
+            HasCompletedSlotMachine = false;
+            StatusScreenShowing = false;
+            SlotMachine.AllowAllSlotsToCycle();
+            //second to millisecond or something idk
             CountdownTimer = MaximumTimerTime * 1000;
             Timer.Start();
             SlotMachineRunning = true;
-            //Runs code asynchronously so that delays dont lag the program.
-            Task.Run(async() =>
+            //Runs code asynchronously so that delays wont lag the program.
+            Task.Run(async () =>
             {
                 while (SlotMachineRunning)
                 {
+                    //taps into main thread because frameworkelements must be "altered"
+                    //on the application thread, not another one (idk why)
                     Application.Current.Dispatcher.Invoke(() =>
                     {
+                        if (SlotMachine.AllSlotMachinesStopped())
+                        {
+                            HasCompletedSlotMachine = true;
+                            StatusScreenShowing = true;
+                            ShowStatusScreen?.Invoke(1);
+                            SlotMachine.ResetEverything();
+                            SlotSelector.ResetEverything();
+                            StopCycle();
+                        }
+
+                        if (CountdownTimer == 0)
+                        {
+                            StatusScreenShowing = true;
+                            ShowStatusScreen?.Invoke(2);
+                            StopCycle();
+                        }
+
                         SlotMachine.CycleItems(1);
                         SlotMachine.CycleItems(2);
                         SlotMachine.CycleItems(3);
@@ -175,8 +159,8 @@ namespace GTA5SightseerApp.ViewModels
                         SlotMachine.CycleItems(7);
                         SlotMachine.CycleItems(8);
                     });
-                    //Delay is every 250ms so that is syncs with the slot machine animation duration.
-                    await Task.Delay(250);
+                    //Delay is every 220ms so that is syncs with the slot machine animation duration.
+                    await Task.Delay(220);
                 }
             });
         }
@@ -184,7 +168,106 @@ namespace GTA5SightseerApp.ViewModels
         public void StopCycle()
         {
             SlotMachineRunning = false;
+            SlotMachine.ResetEverything();
             Timer.Stop();
+        }
+
+        public void KeyDown(Key key)
+        {
+            if (StatusScreenShowing)
+            {
+                StatusScreenShowing = false;
+                HideStatusScreen?.Invoke(1);
+                HideStatusScreen?.Invoke(2);
+
+                StartCycle();
+            }
+
+            SlotSelector.KeyDown(key);
+            if (key == Key.Enter)
+                SlotMachine.SetHighlightedSlotMachineItem();
+            else if (key == Key.Space)
+                SlotMachine.SetHighlightedSlotMachineItem();
+        }
+
+        public void MoveSlotSelectorRight() { SlotSelector.MoveSelectorRight(); }
+        public void RestartSlotSelector()
+        {
+            SlotSelector.ResetEverything();
+            SlotMachine.ResetEverything();
+            ResetScreenAnimation?.Invoke();
+            SlotMachine.AllowAllSlotsToCycle();
+            SignalStrength -= 20;
+
+            if (SignalStrength == 0)
+            {
+                StatusScreenShowing = true;
+                ShowStatusScreen?.Invoke(2);
+                StopCycle();
+            }
+        }
+
+        public void UpdateSelectorSelectedCollection()
+        {
+            SlotMachine.UpdateSelectorSelectedCollection(SlotSelector.SelectedSlotMachineIndex);
+        }
+
+        public void SetSlotSelectorSelectedSlotMachine()
+        {
+            SlotSelector.SelectedSlotMachine = SlotMachine.SelectedSlotMachine;
+        }
+
+        public void AddWordToSlotMachine(string word)
+        {
+            SlotMachine.ResetEverything();
+            SlotSelector.ResetEverything();
+            ResetScreenAnimation?.Invoke();
+            SlotMachine.AddWordToSlotMachine(word);
+        }
+
+        #region yuk
+        // public void SetHighlightedSlotMachineItem()
+        // {
+        //     //this is okay but inefficient tbh... well it kinda isnt because this gives
+        //     //more control over stuff but still
+        //     //Point technicallyNotMousePoint = new Point(0, 0);
+        //     //switch (SlotSelector.SelectedSlotMachineIndex)
+        //     //{
+        //     //    case 1: technicallyNotMousePoint = new Point(195, 435); break;
+        //     //    case 2: technicallyNotMousePoint = new Point(292, 435); break;
+        //     //    case 3: technicallyNotMousePoint = new Point(392, 435); break;
+        //     //    case 4: technicallyNotMousePoint = new Point(489, 435); break;
+        //     //    case 5: technicallyNotMousePoint = new Point(589, 435); break;
+        //     //    case 6: technicallyNotMousePoint = new Point(686, 435); break;
+        //     //    case 7: technicallyNotMousePoint = new Point(784, 435); break;
+        //     //    case 8: technicallyNotMousePoint = new Point(882, 435); break;
+        //     //}
+        //
+        //     //HitTestResult slotHitControl = VisualTreeHelper.HitTest(Application.Current.MainWindow, technicallyNotMousePoint);
+        //     //if (slotHitControl.VisualHit is TextBlock slotItemContent)
+        //     //{
+        //     //    SlotMachine.StopSlotWithHighlightedItemIn(SlotMachine.HighlightedSlotItem);
+        //     //    SlotMachine.HighlightedSlotItem = GetSlotItemFromContentControl(slotItemContent);
+        //     //}
+        // }
+
+        //public SlotMachineItem GetSlotItemFromContentControl(TextBlock content)
+        //{
+        //    foreach (SlotMachineItem smi in SlotMachine.SelectedSlotMachine)
+        //    {
+        //        if (smi.Content == content)
+        //            return smi;
+        //    }
+        //    return null;
+        //}
+        #endregion
+
+        private void TimerTicked(object sender, EventArgs e)
+        {
+            if (CountdownTimer >= 0 && SlotMachineRunning)
+            {
+                CountdownTimer -= Timer.Interval.Milliseconds;
+            }
         }
     }
 }
