@@ -234,7 +234,7 @@ namespace GTA5SightseerApp.ViewModels
                 case 2: SlotMachineColumn2.Insert(RandNumb2.Next(0, SlotMachineColumn2.Count()), smi); break;
                 case 3: SlotMachineColumn3.Insert(RandNumber.Next(0, SlotMachineColumn3.Count()), smi); break;
                 case 4: SlotMachineColumn4.Insert(RandNumber.Next(0, SlotMachineColumn4.Count()), smi); break;
-                case 5: SlotMachineColumn5.Insert(RandNumber.Next(0, SlotMachineColumn5.Count()), smi); break;
+                case 5: SlotMachineColumn5.Insert(RandNumber.Next(0, SlotMachineColumn5.Count()), smi); break;//quad5914 xd
                 case 6: SlotMachineColumn6.Insert(RandNumb2.Next(0, SlotMachineColumn6.Count()), smi); break;
                 case 7: SlotMachineColumn7.Insert(RandNumb2.Next(0, SlotMachineColumn7.Count()), smi); break;
                 case 8: SlotMachineColumn8.Insert(RandNumber.Next(0, SlotMachineColumn8.Count()), smi); break;

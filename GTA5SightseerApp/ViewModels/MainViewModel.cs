@@ -48,8 +48,8 @@ namespace GTA5SightseerApp.ViewModels
             get => _countdownString;
             set => RaisePropertyChanged(ref _countdownString, value);
         }
-        
-        #endregion
+
+        #endregion//quad5914 xdddd
         /// <summary>
         /// Allows you to actually close the window lol
         /// binded through MVVM, aka the datacontext from darktheme.xaml
@@ -81,7 +81,7 @@ namespace GTA5SightseerApp.ViewModels
         public void KeyDown(Key key)
         {
             SlotSelector.KeyDown(key);
-
+            //quad5914 xddddddddddddddddddddddddddddddddd
             if (key == Key.Enter)
                 SetHighlightedSlotMachineItem();
             else if (key == Key.Space)

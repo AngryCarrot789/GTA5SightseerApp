@@ -50,7 +50,7 @@ namespace GTA5SightseerApp
                 await Task.Delay(600);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    MainGrid.Children.Remove(ResetScreenBorder);
+                    MainGrid.Children.Remove(ResetScreenBorder);//quad5914 xdddd
                 });
             });
         }

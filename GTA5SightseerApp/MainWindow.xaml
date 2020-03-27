@@ -47,6 +47,7 @@
             <Grid Opacity="0.8">
                 <Border VerticalAlignment="Center" Height="56" Background="#FF001636" BorderBrush="#FF1B629D" BorderThickness="2"/>
             </Grid>
+            <!--quad5914-->
             <Grid DataContext="{Binding SlotMachine}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
