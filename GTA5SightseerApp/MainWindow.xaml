@@ -4,9 +4,76 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GTA5SightseerApp"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        xmlns:viewmodels="clr-namespace:GTA5SightseerApp.ViewModels"
+        mc:Ignorable="d" Style="{DynamicResource CustomWindowStyle}" WindowStyle="SingleBorderWindow"
+        Title="GTA5 BRUTEFORCE APP (quad5914/ther#6028 )" Height="720" Width="1075"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:il1="clr-namespace:Microsoft.Expression.Interactivity.Layout;assembly=Microsoft.Expression.Interactions" 
+        BorderBrush="#FF1C42B1"
+        KeyDown="Window_KeyDown">
+    <Window.DataContext>
+        <viewmodels:MainViewModel/>
+    </Window.DataContext>
+    <Grid x:Name="MainGrid">
+        <Grid VerticalAlignment="Top" Height="375" Margin="134,220,134,0" Background="#FF050505">
+            <Grid.OpacityMask>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Transparent" Offset="0.1"/>
+                    <GradientStop Color="Transparent" Offset="0.9"/>
+                    <GradientStop Color="White" Offset="0.2"/>
+                    <GradientStop Color="White" Offset="0.8"/>
+                </LinearGradientBrush>
+            </Grid.OpacityMask>
+            <Grid Opacity="0.8" DataContext="{Binding SlotSelector}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Visibility="{Binding Slot1Visibility, UpdateSourceTrigger=PropertyChanged}" Width="56" Background="#FF001601" BorderBrush="#FF499A37" BorderThickness="2"  Margin="0 -60, 0, -60" Grid.Column="0"/>
+                <Border Visibility="{Binding Slot2Visibility, UpdateSourceTrigger=PropertyChanged}" Width="56" Background="#FF001601" BorderBrush="#FF499A37" BorderThickness="2"  Margin="0 -60, 0, -60" Grid.Column="1"/>
+                <Border Visibility="{Binding Slot3Visibility, UpdateSourceTrigger=PropertyChanged}" Width="56" Background="#FF001601" BorderBrush="#FF499A37" BorderThickness="2"  Margin="0 -60, 0, -60" Grid.Column="2"/>
+                <Border Visibility="{Binding Slot4Visibility, UpdateSourceTrigger=PropertyChanged}" Width="56" Background="#FF001601" BorderBrush="#FF499A37" BorderThickness="2"  Margin="0 -60, 0, -60" Grid.Column="3"/>
+                <Border Visibility="{Binding Slot5Visibility, UpdateSourceTrigger=PropertyChanged}" Width="56" Background="#FF001601" BorderBrush="#FF499A37" BorderThickness="2"  Margin="0 -60, 0, -60" Grid.Column="4"/>
+                <Border Visibility="{Binding Slot6Visibility, UpdateSourceTrigger=PropertyChanged}" Width="56" Background="#FF001601" BorderBrush="#FF499A37" BorderThickness="2"  Margin="0 -60, 0, -60" Grid.Column="5"/>
+                <Border Visibility="{Binding Slot7Visibility, UpdateSourceTrigger=PropertyChanged}" Width="56" Background="#FF001601" BorderBrush="#FF499A37" BorderThickness="2"  Margin="0 -60, 0, -60" Grid.Column="6"/>
+                <Border Visibility="{Binding Slot8Visibility, UpdateSourceTrigger=PropertyChanged}" Width="56" Background="#FF001601" BorderBrush="#FF499A37" BorderThickness="2"  Margin="0 -60, 0, -60" Grid.Column="7"/>
+            </Grid>
+            <Grid Opacity="0.8">
+                <Border VerticalAlignment="Center" Height="56" Background="#FF001636" BorderBrush="#FF1B629D" BorderThickness="2"/>
+            </Grid>
+            <Grid DataContext="{Binding SlotMachine}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ListBox ItemsSource="{Binding SlotMachineColumn1, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" FontSize="48" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" Margin="0 -60, 0, -60" Grid.Column="0"/>
+                <ListBox ItemsSource="{Binding SlotMachineColumn2, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" FontSize="48" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" Margin="0 -60, 0, -60" Grid.Column="1"/>
+                <ListBox ItemsSource="{Binding SlotMachineColumn3, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" FontSize="48" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" Margin="0 -60, 0, -60" Grid.Column="2"/>
+                <ListBox ItemsSource="{Binding SlotMachineColumn4, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" FontSize="48" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" Margin="0 -60, 0, -60" Grid.Column="3"/>
+                <ListBox ItemsSource="{Binding SlotMachineColumn5, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" FontSize="48" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" Margin="0 -60, 0, -60" Grid.Column="4"/>
+                <ListBox ItemsSource="{Binding SlotMachineColumn6, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" FontSize="48" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" Margin="0 -60, 0, -60" Grid.Column="5"/>
+                <ListBox ItemsSource="{Binding SlotMachineColumn7, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" FontSize="48" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" Margin="0 -60, 0, -60" Grid.Column="6"/>
+                <ListBox ItemsSource="{Binding SlotMachineColumn8, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" FontSize="48" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" Margin="0 -60, 0, -60" Grid.Column="7"/>
+            </Grid>
+        </Grid>
+        <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" Text="BRUTEFORCE" VerticalAlignment="Top" FontSize="64" FontFamily="Orbitron" Foreground="#FF06D300"/>
+        <TextBlock HorizontalAlignment="Center" Margin="0,87,0,0" Text="- BUSTING THROUGH THE BACKDOOR SINCE 1998 -" VerticalAlignment="Top" FontSize="24" FontFamily="Orbitron" Foreground="#FF06D300"/>
+        <TextBlock Text="{Binding CountdownTimerFormatted, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Margin="0,158,0,0" VerticalAlignment="Top" FontSize="24" FontFamily="Orbitron" Foreground="#FF06D300"/>
+        <Button x:Name="strtBtn" Focusable="False" Content="Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="116" Height="77" Click="Button_Click" FontSize="24" Background="#FF0C0C0C" BorderBrush="#FF121212"/>
+        <Image Margin="0,22,610,0" Source="Image1.png" Stretch="Fill" Height="60" VerticalAlignment="Top" HorizontalAlignment="Center" Width="96"/>
+        <Image Margin="610,15,0,0" HorizontalAlignment="Center" Source="Image2.png" Stretch="Fill" Height="67" VerticalAlignment="Top" Width="96"/>
+        <Button Focusable="False" Content="Reset" HorizontalAlignment="Left" Margin="10,92,0,0" VerticalAlignment="Top" Width="116" Height="77" FontSize="24" Background="#FF0C0C0C" BorderBrush="#FF121212" Click="Button_Click_1"/>
     </Grid>
 </Window>
